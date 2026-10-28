@@ -25,8 +25,10 @@
 
 ## 🚀 Canlı Oyna (Web Sürümü)
 
-Proje, hiçbir kurulum veya kütüphane gerektirmeyen saf HTML5 Canvas ve Web Audio API ile çalışır.
-Deponuzda **GitHub Pages** aktif edildiğinde oyun doğrudan `https://<kullanici-adiniz>.github.io/<repo-adi>/` adresinde oynanabilir.
+Oyunu tarayıcınızda doğrudan oynamak için:
+👉 **[https://husamettinbinici.github.io/safak-vakti/](https://husamettinbinici.github.io/safak-vakti/)**
+
+Proje, hiçbir kurulum veya ek kütüphane gerektirmeyen saf HTML5 Canvas ve Web Audio API ile çalışır.
 
 ### Yerel Olarak Çalıştırma:
 1. Depoyu klonlayın:
