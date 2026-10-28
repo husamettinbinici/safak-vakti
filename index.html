@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Şafak Vakti: İstanbul Semalarında | Bayrak Rüzgarı</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800;900&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap');
+    body {
+      user-select: none;
+      -webkit-user-select: none;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      touch-action: manipulation;
+    }
+    .title-font {
+      font-family: 'Cinzel', serif;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 flex flex-col items-center justify-center min-h-screen p-2 sm:p-4 overflow-hidden select-none">
+
+  <!-- Main Game Container -->
+  <div class="relative w-full max-w-[680px] bg-slate-900 border-2 border-amber-600/40 rounded-2xl shadow-2xl overflow-hidden flex flex-col items-center">
+    
+    <!-- Top Bar / HUD -->
+    <div class="w-full bg-gradient-to-r from-red-950 via-slate-900 to-amber-950/80 px-4 py-2.5 border-b border-amber-500/30 flex items-center justify-between z-10">
+      <div class="flex items-center space-x-2">
+        <span class="text-xl">🇹🇷</span>
+        <div>
+          <h1 class="title-font text-sm font-extrabold tracking-wider text-amber-300 uppercase leading-none">Şafak Vakti</h1>
+          <p class="text-[11px] text-amber-200/70 font-medium leading-tight">İstanbul Semalarında</p>
+        </div>
+      </div>
+
+      <!-- Score Counters -->
+      <div class="flex items-center space-x-4">
+        <div class="flex items-center space-x-1.5 bg-black/40 px-3 py-1 rounded-full border border-amber-400/20">
+          <span class="text-xs">⭐</span>
+          <span id="scoreDisplay" class="font-bold text-amber-300 text-sm tracking-wide">0</span>
+        </div>
+        <div class="flex items-center space-x-1.5 bg-black/40 px-3 py-1 rounded-full border border-amber-400/20">
+          <span class="text-xs text-amber-400 font-bold">REKOR</span>
+          <span id="highScoreDisplay" class="font-bold text-slate-200 text-sm">0</span>
+        </div>
+        <!-- Sound Toggle -->
+        <button id="soundToggleBtn" class="p-1.5 rounded-lg bg-red-900/40 hover:bg-red-800/60 border border-red-500/30 text-amber-300 text-xs transition" title="Sesi Aç/Kapat">
+          🔊
+        </button>
+      </div>
+    </div>
+
+    <!-- Canvas Frame -->
+    <div class="relative w-full aspect-[4/3] max-h-[500px] bg-slate-950">
+      <canvas id="gameCanvas" class="w-full h-full block cursor-pointer"></canvas>
+
+      <!-- Combo & Message Floating Banner -->
+      <div id="comboBanner" class="absolute top-4 left-1/2 -translate-x-1/2 pointer-events-none opacity-0 transition-all duration-300 scale-90 z-20 text-center">
+        <span id="comboText" class="px-4 py-1.5 rounded-full bg-amber-500/90 text-slate-950 font-black text-xs sm:text-sm tracking-wider shadow-lg border border-white/50 backdrop-blur-sm">
+          ÇAY & SİMİT KOMBOSU! +50
+        </span>
+      </div>
+
+      <!-- Start Overlay -->
+      <div id="startOverlay" class="absolute inset-0 bg-black/60 backdrop-blur-xs flex flex-col items-center justify-center p-6 text-center z-20 transition-opacity duration-300">
+        <div class="w-16 h-16 rounded-full bg-gradient-to-tr from-red-600 to-amber-500 flex items-center justify-center shadow-lg shadow-red-600/30 mb-3 animate-pulse">
+          <span class="text-3xl">🕊️</span>
+        </div>
+        <h2 class="title-font text-2xl sm:text-3xl font-black text-amber-300 mb-1 drop-shadow-md">BAYRAK RÜZGARI</h2>
+        <p class="text-xs sm:text-sm text-amber-100/90 max-w-sm mb-5 font-medium leading-relaxed">
+          İstanbul semalarında şanlı bayrağımızı fırtınalı bulutlardan koru. Çay, simit ve hilalleri toplayarak şafağı aydınlat!
+        </p>
+
+        <div class="bg-white/5 border border-white/10 rounded-xl px-5 py-3 mb-5 max-w-xs text-xs text-slate-300 space-y-1">
+          <p class="flex items-center justify-center gap-2"><span>👆 <strong>Tıkla / Dokun</strong> veya <strong>Boşluk (Space)</strong></span></p>
+          <p class="text-amber-300/80 font-bold">☕ Çay (+10) • 🥯 Simit (+15) • ⭐ Ay-Yıldız (+30)</p>
+        </div>
+
+        <button id="startBtn" class="px-8 py-3 bg-gradient-to-r from-red-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-extrabold rounded-xl shadow-xl shadow-red-700/40 border border-amber-400/40 transform active:scale-95 transition tracking-wider uppercase text-sm">
+          Uçuşa Başla
+        </button>
+      </div>
+
+      <!-- Game Over Overlay -->
+      <div id="gameOverOverlay" class="absolute inset-0 bg-black/75 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center z-20 hidden">
+        <div class="w-14 h-14 rounded-full bg-slate-800 border border-red-500/40 flex items-center justify-center mb-3">
+          <span class="text-2xl">🌅</span>
+        </div>
+        <h3 class="title-font text-2xl font-black text-red-400 mb-1">Rüzgar Dindi</h3>
+        <p class="text-xs text-slate-300 mb-4 font-medium">Bayrağımız göklerde ebediyen dalgalanır.</p>
+
+        <div class="grid grid-cols-2 gap-3 w-full max-w-xs mb-5">
+          <div class="bg-slate-900/80 border border-amber-500/20 p-2.5 rounded-xl">
+            <div class="text-[10px] text-amber-300 font-bold uppercase">Kazanılan Puan</div>
+            <div id="finalScore" class="text-xl font-black text-white">0</div>
+          </div>
+          <div class="bg-slate-900/80 border border-amber-500/20 p-2.5 rounded-xl">
+            <div class="text-[10px] text-amber-300 font-bold uppercase">En İyi Skor</div>
+            <div id="finalHighScore" class="text-xl font-black text-amber-400">0</div>
+          </div>
+        </div>
+
+        <button id="restartBtn" class="px-8 py-3 bg-gradient-to-r from-red-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-extrabold rounded-xl shadow-lg shadow-red-700/40 border border-amber-400/40 transform active:scale-95 transition tracking-wider uppercase text-sm">
+          Tekrar Havalan (Boşluk)
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Footer Controls Tip -->
+    <div class="w-full bg-slate-950/80 px-4 py-2 border-t border-slate-800 text-[11px] text-slate-400 flex justify-between items-center">
+      <span>🕹️ Boşluk / Fare Tıklaması ile Zıpla</span>
+      <span class="text-amber-400/80 font-medium">Şafak Vakti Arcade Projesi</span>
+    </div>
+
+  </div>
+
+  <script>
+    // --- AUDIO SYNTHESIZER (Ney, Bağlama & Mehter Tones) ---
+    class TurkishAtmosphereAudio {
+      constructor() {
+        this.ctx = null;
+        this.enabled = true;
+      }
+
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          this.ctx = new AudioContext();
+        }
+        if (this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+
+      playJump() {
+        if (!this.enabled) return;
+        this.init();
+        try {
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(260, now);
+          osc.frequency.exponentialRampToValueAtTime(540, now + 0.14);
+
+          gain.gain.setValueAtTime(0.18, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
+
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+
+          osc.start(now);
+          osc.stop(now + 0.18);
+        } catch(e) {}
+      }
+
+      playNeyCollect(frequency = 587.33) {
+        if (!this.enabled) return;
+        this.init();
+        try {
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const subOsc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          const filter = this.ctx.createBiquadFilter();
+
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(frequency, now);
+
+          // Subtle Ney vibrato
+          subOsc.type = 'sine';
+          subOsc.frequency.setValueAtTime(5.5, now);
+          const vibratoGain = this.ctx.createGain();
+          vibratoGain.gain.setValueAtTime(4.0, now);
+          subOsc.connect(vibratoGain);
+          vibratoGain.connect(osc.frequency);
+          subOsc.start(now);
+          subOsc.stop(now + 0.35);
+
+          filter.type = 'lowpass';
+          filter.frequency.setValueAtTime(1400, now);
+
+          gain.gain.setValueAtTime(0.001, now);
+          gain.gain.linearRampToValueAtTime(0.25, now + 0.05);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+
+          osc.connect(filter);
+          filter.connect(gain);
+          gain.connect(this.ctx.destination);
+
+          osc.start(now);
+          osc.stop(now + 0.36);
+        } catch(e) {}
+      }
+
+      playMehterChord() {
+        if (!this.enabled) return;
+        this.init();
+        try {
+          const now = this.ctx.currentTime;
+          const notes = [293.66, 369.99, 440.00, 587.33]; // Rast / Coşku
+          notes.forEach((freq, idx) => {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(freq, now + idx * 0.03);
+
+            const filter = this.ctx.createBiquadFilter();
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(1200, now);
+
+            gain.gain.setValueAtTime(0.09, now + idx * 0.03);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+
+            osc.connect(filter);
+            filter.connect(gain);
+            gain.connect(this.ctx.destination);
+
+            osc.start(now + idx * 0.03);
+            osc.stop(now + 0.5);
+          });
+        } catch(e) {}
+      }
+
+      playHit() {
+        if (!this.enabled) return;
+        this.init();
+        try {
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(180, now);
+          osc.frequency.exponentialRampToValueAtTime(65, now + 0.3);
+
+          gain.gain.setValueAtTime(0.3, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.38);
+        } catch(e) {}
+      }
+    }
+
+    const sound = new TurkishAtmosphereAudio();
+
+    // --- GAME ENGINE ---
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    const scoreDisplay = document.getElementById('scoreDisplay');
+    const highScoreDisplay = document.getElementById('highScoreDisplay');
+    const startOverlay = document.getElementById('startOverlay');
+    const gameOverOverlay = document.getElementById('gameOverOverlay');
+    const startBtn = document.getElementById('startBtn');
+    const restartBtn = document.getElementById('restartBtn');
+    const soundToggleBtn = document.getElementById('soundToggleBtn');
+    const comboBanner = document.getElementById('comboBanner');
+    const comboText = document.getElementById('comboText');
+    const finalScore = document.getElementById('finalScore');
+    const finalHighScore = document.getElementById('finalHighScore');
+
+    let highScore = parseInt(localStorage.getItem('safak_vakti_highscore') || '0', 10);
+    highScoreDisplay.textContent = highScore;
+
+    function resizeCanvas() {
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * window.devicePixelRatio;
+      canvas.height = rect.height * window.devicePixelRatio;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    let state = 'START';
+    let score = 0;
+    let frame = 0;
+
+    const player = {
+      x: 100,
+      y: 200,
+      radius: 20,
+      vy: 0,
+      gravity: 0.38,
+      jumpForce: -7.2,
+      rotation: 0,
+      flagWaveTime: 0,
+      trail: []
+    };
+
+    let obstacles = [];
+    let obstacleTimer = 0;
+    const OBSTACLE_INTERVAL = 115;
+
+    let collectibles = [];
+    let sparkles = [];
+
+    let bgOffsetFar = 0;
+    let bgOffsetMid = 0;
+    let bgOffsetSea = 0;
+
+    function resetGame() {
+      player.x = canvas.width * 0.22;
+      player.y = canvas.height * 0.45;
+      player.vy = 0;
+      player.rotation = 0;
+      player.flagWaveTime = 0;
+      player.trail = [];
+
+      obstacles = [];
+      collectibles = [];
+      sparkles = [];
+      obstacleTimer = 0;
+      score = 0;
+      scoreDisplay.textContent = '0';
+    }
+
+    function jump() {
+      if (state === 'START') {
+        startGame();
+        return;
+      }
+      if (state === 'GAMEOVER') {
+        restartGame();
+        return;
+      }
+      if (state === 'PLAYING') {
+        player.vy = player.jumpForce;
+        sound.playJump();
+
+        for (let i = 0; i < 4; i++) {
+          sparkles.push({
+            x: player.x - 20,
+            y: player.y + (Math.random() * 20 - 10),
+            vx: -2 - Math.random() * 2,
+            vy: Math.random() * 2 - 1,
+            size: 2 + Math.random() * 3,
+            color: 'rgba(255, 230, 180, 0.7)',
+            life: 1
+          });
+        }
+      }
+    }
+
+    function showCombo(text) {
+      comboText.textContent = text;
+      comboBanner.style.opacity = '1';
+      comboBanner.style.transform = 'translate(-50%, 0) scale(1)';
+      setTimeout(() => {
+        comboBanner.style.opacity = '0';
+        comboBanner.style.transform = 'translate(-50%, -10px) scale(0.9)';
+      }, 1400);
+    }
+
+    function spawnObstaclePair() {
+      const w = canvas.width;
+      const h = canvas.height;
+      const gap = Math.max(140, h * 0.32);
+      const minTop = 60;
+      const maxTop = h - gap - 60;
+      const topHeight = minTop + Math.random() * (maxTop - minTop);
+
+      obstacles.push({
+        x: w + 40,
+        width: 65,
+        topHeight: topHeight,
+        bottomY: topHeight + gap,
+        passed: false
+      });
+
+      const itemY = topHeight + gap / 2;
+      const r = Math.random();
+      let type = 'TEA';
+      if (r < 0.35) type = 'TEA';
+      else if (r < 0.7) type = 'SIMIT';
+      else type = 'STAR';
+
+      collectibles.push({
+        x: w + 40 + 32,
+        y: itemY,
+        type: type,
+        radius: 18,
+        floatOffset: Math.random() * Math.PI * 2,
+        collected: false
+      });
+    }
+
+    function drawSkyAndSilhouette() {
+      const w = canvas.width;
+      const h = canvas.height;
+
+      const skyGrad = ctx.createLinearGradient(0, 0, 0, h);
+      skyGrad.addColorStop(0, '#1a0b2e');
+      skyGrad.addColorStop(0.35, '#5c1d39');
+      skyGrad.addColorStop(0.65, '#b44426');
+      skyGrad.addColorStop(0.85, '#f59e0b');
+      skyGrad.addColorStop(1, '#0f172a');
+      ctx.fillStyle = skyGrad;
+      ctx.fillRect(0, 0, w, h);
+
+      const sunGrad = ctx.createRadialGradient(w * 0.75, h * 0.72, 10, w * 0.75, h * 0.72, 180);
+      sunGrad.addColorStop(0, 'rgba(254, 240, 138, 0.85)');
+      sunGrad.addColorStop(0.4, 'rgba(249, 115, 22, 0.4)');
+      sunGrad.addColorStop(1, 'rgba(249, 115, 22, 0)');
+      ctx.fillStyle = sunGrad;
+      ctx.fillRect(0, 0, w, h);
+
+      ctx.fillStyle = 'rgba(60, 20, 45, 0.45)';
+      ctx.beginPath();
+      ctx.moveTo(0, h * 0.78);
+      for (let x = 0; x <= w; x += 40) {
+        const y = h * 0.76 + Math.sin((x + bgOffsetFar * 0.2) * 0.006) * 16;
+        ctx.lineTo(x, y);
+      }
+      ctx.lineTo(w, h);
+      ctx.lineTo(0, h);
+      ctx.fill();
+
+      ctx.fillStyle = 'rgba(24, 10, 30, 0.9)';
+      const skylinePatternWidth = 480;
+      const startX = -(bgOffsetMid % skylinePatternWidth);
+
+      for (let offset = startX - skylinePatternWidth; offset < w + skylinePatternWidth; offset += skylinePatternWidth) {
+        drawIstanbulSegment(offset, h * 0.82);
+      }
+
+      const seaGrad = ctx.createLinearGradient(0, h * 0.82, 0, h);
+      seaGrad.addColorStop(0, 'rgba(15, 23, 42, 0.95)');
+      seaGrad.addColorStop(0.2, 'rgba(180, 83, 9, 0.3)');
+      seaGrad.addColorStop(1, 'rgba(2, 6, 23, 1)');
+      ctx.fillStyle = seaGrad;
+      ctx.fillRect(0, h * 0.82, w, h * 0.18);
+
+      ctx.strokeStyle = 'rgba(253, 224, 71, 0.25)';
+      ctx.lineWidth = 1.5;
+      for (let i = 0; i < 6; i++) {
+        const ry = h * (0.84 + i * 0.024);
+        const shift = (bgOffsetSea + i * 35) % w;
+        ctx.beginPath();
+        ctx.moveTo(w - shift, ry);
+        ctx.lineTo(w - shift + 70 + i * 15, ry);
+        ctx.stroke();
+      }
+    }
+
+    function drawIstanbulSegment(baseX, baseY) {
+      ctx.save();
+      ctx.translate(baseX, baseY);
+
+      ctx.beginPath();
+      ctx.arc(140, 0, 35, Math.PI, 0, false);
+      ctx.fill();
+
+      ctx.fillRect(92, -55, 6, 55);
+      ctx.beginPath();
+      ctx.moveTo(89, -55); ctx.lineTo(95, -70); ctx.lineTo(101, -55); ctx.fill();
+      ctx.fillRect(90, -40, 10, 4);
+
+      ctx.fillRect(182, -55, 6, 55);
+      ctx.beginPath();
+      ctx.moveTo(179, -55); ctx.lineTo(185, -70); ctx.lineTo(191, -55); ctx.fill();
+      ctx.fillRect(180, -40, 10, 4);
+
+      ctx.fillRect(320, -65, 24, 65);
+      ctx.fillRect(316, -68, 32, 6);
+      ctx.beginPath();
+      ctx.moveTo(316, -68);
+      ctx.lineTo(332, -95);
+      ctx.lineTo(348, -68);
+      ctx.fill();
+
+      ctx.fillRect(410, -25, 28, 25);
+      ctx.fillRect(418, -45, 12, 20);
+      ctx.beginPath();
+      ctx.moveTo(416, -45); ctx.lineTo(424, -60); ctx.lineTo(432, -45); ctx.fill();
+
+      ctx.restore();
+    }
+
+    function drawWavingTurkishFlag(x, y, vy) {
+      ctx.save();
+      ctx.translate(x, y);
+
+      const targetAngle = Math.max(-0.45, Math.min(0.65, vy * 0.06));
+      player.rotation += (targetAngle - player.rotation) * 0.2;
+      ctx.rotate(player.rotation);
+
+      ctx.fillStyle = '#f59e0b';
+      ctx.fillRect(-18, -26, 4, 52);
+      ctx.beginPath();
+      ctx.arc(-16, -26, 3.5, 0, Math.PI * 2);
+      ctx.fill();
+
+      player.flagWaveTime += 0.16;
+      const flagWidth = 46;
+      const flagHeight = 32;
+      const waveFreq = 0.12;
+      const waveAmp = 3.5;
+
+      ctx.save();
+      ctx.beginPath();
+
+      ctx.moveTo(-14, -18);
+      for (let px = 0; px <= flagWidth; px += 4) {
+        const wave = Math.sin(player.flagWaveTime + px * waveFreq) * (px / flagWidth) * waveAmp;
+        ctx.lineTo(-14 + px, -18 + wave);
+      }
+
+      for (let px = flagWidth; px >= 0; px -= 4) {
+        const wave = Math.sin(player.flagWaveTime + px * waveFreq) * (px / flagWidth) * waveAmp;
+        ctx.lineTo(-14 + px, -18 + flagHeight + wave);
+      }
+      ctx.closePath();
+
+      const flagGrad = ctx.createLinearGradient(-14, -18, -14 + flagWidth, -18);
+      flagGrad.addColorStop(0, '#dc2626');
+      flagGrad.addColorStop(0.5, '#ef4444');
+      flagGrad.addColorStop(1, '#b91c1c');
+      ctx.fillStyle = flagGrad;
+      ctx.shadowColor = 'rgba(239, 68, 68, 0.4)';
+      ctx.shadowBlur = 10;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      ctx.clip();
+
+      const midWave = Math.sin(player.flagWaveTime + 18 * waveFreq) * (18 / flagWidth) * waveAmp;
+      const cx = -14 + 18;
+      const cy = -18 + 16 + midWave;
+
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(cx - 2, cy, 7.5, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#dc2626';
+      ctx.beginPath();
+      ctx.arc(cx + 0.5, cy, 6, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#ffffff';
+      drawStar(cx + 7, cy, 5, 4.2, 2.1);
+
+      ctx.restore();
+      ctx.restore();
+    }
+
+    function drawStar(cx, cy, spikes, outerRadius, innerRadius) {
+      let rot = Math.PI / 2 * 3;
+      let x = cx;
+      let y = cy;
+      const step = Math.PI / spikes;
+
+      ctx.beginPath();
+      ctx.moveTo(cx, cy - outerRadius);
+      for (let i = 0; i < spikes; i++) {
+        x = cx + Math.cos(rot) * outerRadius;
+        y = cy + Math.sin(rot) * outerRadius;
+        ctx.lineTo(x, y);
+        rot += step;
+
+        x = cx + Math.cos(rot) * innerRadius;
+        y = cy + Math.sin(rot) * innerRadius;
+        ctx.lineTo(x, y);
+        rot += step;
+      }
+      ctx.lineTo(cx, cy - outerRadius);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    function drawObstacles() {
+      obstacles.forEach(obs => {
+        drawCloudColumn(obs.x, 0, obs.width, obs.topHeight, true);
+        drawCloudColumn(obs.x, obs.bottomY, obs.width, canvas.height - obs.bottomY, false);
+      });
+    }
+
+    function drawCloudColumn(x, y, w, h, isTop) {
+      ctx.save();
+      const grad = ctx.createLinearGradient(x, y, x + w, y + h);
+      grad.addColorStop(0, '#1e1b4b');
+      grad.addColorStop(0.7, '#312e81');
+      grad.addColorStop(1, '#4338ca');
+      ctx.fillStyle = grad;
+
+      ctx.beginPath();
+      ctx.roundRect(x, y, w, h, 16);
+      ctx.fill();
+
+      ctx.fillStyle = '#4c1d95';
+      const puffY = isTop ? y + h : y;
+      for (let i = 0; i < 3; i++) {
+        ctx.beginPath();
+        ctx.arc(x + 12 + i * 20, puffY, 14, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      ctx.strokeStyle = 'rgba(251, 191, 36, 0.4)';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      if (isTop) {
+        ctx.moveTo(x - 2, y + h);
+        ctx.lineTo(x + w + 2, y + h);
+      } else {
+        ctx.moveTo(x - 2, y);
+        ctx.lineTo(x + w + 2, y);
+      }
+      ctx.stroke();
+
+      ctx.restore();
+    }
+
+    function drawCollectibles() {
+      collectibles.forEach(item => {
+        if (item.collected) return;
+        const fy = item.y + Math.sin(frame * 0.08 + item.floatOffset) * 6;
+
+        ctx.save();
+        ctx.translate(item.x, fy);
+
+        const glow = ctx.createRadialGradient(0, 0, 4, 0, 0, item.radius + 8);
+        glow.addColorStop(0, 'rgba(251, 191, 36, 0.5)');
+        glow.addColorStop(1, 'rgba(251, 191, 36, 0)');
+        ctx.fillStyle = glow;
+        ctx.beginPath();
+        ctx.arc(0, 0, item.radius + 8, 0, Math.PI * 2);
+        ctx.fill();
+
+        if (item.type === 'TEA') {
+          ctx.fillStyle = 'rgba(185, 28, 28, 0.85)';
+          ctx.beginPath();
+          ctx.ellipse(0, 4, 9, 12, 0, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.strokeStyle = '#fef08a';
+          ctx.lineWidth = 1.8;
+          ctx.beginPath();
+          ctx.moveTo(-9, -12);
+          ctx.bezierCurveTo(-5, -2, -4, 4, -8, 14);
+          ctx.lineTo(8, 14);
+          ctx.bezierCurveTo(4, 4, 5, -2, 9, -12);
+          ctx.closePath();
+          ctx.stroke();
+
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(-12, 14, 24, 3);
+          ctx.fillStyle = '#dc2626';
+          ctx.fillRect(-8, 14, 16, 1.5);
+
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+          ctx.lineWidth = 1.2;
+          ctx.beginPath();
+          ctx.moveTo(-2, -14);
+          ctx.quadraticCurveTo(-6, -20, -2, -24);
+          ctx.moveTo(3, -13);
+          ctx.quadraticCurveTo(6, -18, 3, -23);
+          ctx.stroke();
+
+        } else if (item.type === 'SIMIT') {
+          ctx.fillStyle = '#b45309';
+          ctx.beginPath();
+          ctx.arc(0, 0, 13, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = '#1e1b4b';
+          ctx.beginPath();
+          ctx.arc(0, 0, 6, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = '#fef08a';
+          for (let s = 0; s < 8; s++) {
+            const ang = (s / 8) * Math.PI * 2;
+            const sx = Math.cos(ang) * 9.5;
+            const sy = Math.sin(ang) * 9.5;
+            ctx.fillRect(sx, sy, 2, 2);
+          }
+
+        } else if (item.type === 'STAR') {
+          ctx.fillStyle = '#fde047';
+          ctx.beginPath();
+          ctx.arc(-2, 0, 11, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = '#312e81';
+          ctx.beginPath();
+          ctx.arc(2, 0, 9, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = '#ffffff';
+          drawStar(6, 0, 5, 5, 2.5);
+        }
+
+        ctx.restore();
+      });
+    }
+
+    function drawSparkles() {
+      for (let i = sparkles.length - 1; i >= 0; i--) {
+        const p = sparkles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.life -= 0.025;
+
+        if (p.life <= 0) {
+          sparkles.splice(i, 1);
+          continue;
+        }
+
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = p.life;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 1.0;
+      }
+    }
+
+    function update() {
+      frame++;
+
+      if (state === 'PLAYING') {
+        player.vy += player.gravity;
+        player.y += player.vy;
+
+        if (player.y - player.radius < 0) {
+          player.y = player.radius;
+          player.vy = 0;
+        }
+        if (player.y + player.radius > canvas.height * 0.82) {
+          triggerGameOver();
+          return;
+        }
+
+        bgOffsetFar += 0.5;
+        bgOffsetMid += 1.4;
+        bgOffsetSea += 2.0;
+
+        obstacleTimer++;
+        if (obstacleTimer >= OBSTACLE_INTERVAL) {
+          obstacleTimer = 0;
+          spawnObstaclePair();
+        }
+
+        for (let i = obstacles.length - 1; i >= 0; i--) {
+          const obs = obstacles[i];
+          obs.x -= 2.6;
+
+          if (!obs.passed && obs.x + obs.width < player.x) {
+            obs.passed = true;
+            score += 5;
+            scoreDisplay.textContent = score;
+            sound.playNeyCollect(523.25);
+          }
+
+          const px = player.x;
+          const py = player.y;
+          const r = 14;
+
+          if (px + r > obs.x && px - r < obs.x + obs.width) {
+            if (py - r < obs.topHeight || py + r > obs.bottomY) {
+              triggerGameOver();
+              return;
+            }
+          }
+
+          if (obs.x + obs.width < -60) {
+            obstacles.splice(i, 1);
+          }
+        }
+
+        for (let i = collectibles.length - 1; i >= 0; i--) {
+          const item = collectibles[i];
+          item.x -= 2.6;
+
+          const dx = item.x - player.x;
+          const dy = item.y - player.y;
+          const dist = Math.hypot(dx, dy);
+
+          if (!item.collected && dist < player.radius + item.radius) {
+            item.collected = true;
+
+            let pts = 10;
+            if (item.type === 'TEA') {
+              pts = 10;
+              sound.playNeyCollect(587.33);
+              showCombo('TAVŞANKANI ÇAY! +10');
+            } else if (item.type === 'SIMIT') {
+              pts = 15;
+              sound.playNeyCollect(659.25);
+              showCombo('ÇITIR SİMİT! +15');
+            } else if (item.type === 'STAR') {
+              pts = 30;
+              sound.playMehterChord();
+              showCombo('ŞANLI HİLAL! +30');
+            }
+
+            score += pts;
+            scoreDisplay.textContent = score;
+
+            for (let s = 0; s < 12; s++) {
+              sparkles.push({
+                x: item.x,
+                y: item.y,
+                vx: (Math.random() - 0.5) * 6,
+                vy: (Math.random() - 0.5) * 6,
+                size: 3 + Math.random() * 3,
+                color: item.type === 'TEA' ? '#ef4444' : '#fbbf24',
+                life: 1.0
+              });
+            }
+          }
+
+          if (item.x < -40 || item.collected) {
+            collectibles.splice(i, 1);
+          }
+        }
+      }
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawSkyAndSilhouette();
+      drawObstacles();
+      drawCollectibles();
+      drawSparkles();
+      drawWavingTurkishFlag(player.x, player.y, player.vy);
+
+      requestAnimationFrame(update);
+    }
+
+    function triggerGameOver() {
+      state = 'GAMEOVER';
+      sound.playHit();
+
+      if (score > highScore) {
+        highScore = score;
+        localStorage.setItem('safak_vakti_highscore', highScore.toString());
+        highScoreDisplay.textContent = highScore;
+      }
+
+      finalScore.textContent = score;
+      finalHighScore.textContent = highScore;
+      gameOverOverlay.classList.remove('hidden');
+    }
+
+    function startGame() {
+      sound.init();
+      resetGame();
+      state = 'PLAYING';
+      startOverlay.classList.add('hidden');
+      gameOverOverlay.classList.add('hidden');
+      player.vy = player.jumpForce;
+      sound.playJump();
+    }
+
+    function restartGame() {
+      resetGame();
+      state = 'PLAYING';
+      gameOverOverlay.classList.add('hidden');
+      player.vy = player.jumpForce;
+      sound.playJump();
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.code === 'Space') {
+        e.preventDefault();
+        jump();
+      }
+    });
+
+    canvas.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      jump();
+    });
+
+    startBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      startGame();
+    });
+
+    restartBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      restartGame();
+    });
+
+    soundToggleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      sound.enabled = !sound.enabled;
+      soundToggleBtn.textContent = sound.enabled ? '🔊' : '🔇';
+    });
+
+    player.x = canvas.width * 0.22;
+    player.y = canvas.height * 0.45;
+    requestAnimationFrame(update);
+  </script>
+</body>
+</html>
