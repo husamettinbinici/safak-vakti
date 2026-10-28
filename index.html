@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Şafak Vakti: İstanbul Semalarında | Bayrak Rüzgarı</title>
+  <title>Şafak Vakti: Bol Simit & Güneşli Can Modu</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800;900&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap');
@@ -20,7 +20,7 @@
 </head>
 <body class="bg-slate-950 text-slate-100 flex flex-col items-center justify-center min-h-screen p-2 sm:p-4 overflow-hidden select-none">
 
-  <!-- Main Game Container (Expanded Widescreen View) -->
+  <!-- Main Game Container -->
   <div class="relative w-full max-w-[900px] bg-slate-900 border-2 border-amber-600/40 rounded-2xl shadow-2xl overflow-hidden flex flex-col items-center">
     
     <!-- Top Bar / HUD -->
@@ -29,14 +29,14 @@
         <span class="text-2xl">🇹🇷</span>
         <div>
           <h1 class="title-font text-sm font-extrabold tracking-wider text-amber-300 uppercase leading-none">Şafak Vakti</h1>
-          <p class="text-[11px] text-amber-200/70 font-medium leading-tight">İstanbul Semalarında • Rahat Mod</p>
+          <p class="text-[11px] text-amber-200/70 font-medium leading-tight">İstanbul Semalarında • Simit & Güneş</p>
         </div>
       </div>
 
       <!-- Lives & Score Counters -->
       <div class="flex items-center space-x-3 sm:space-x-4">
         <!-- 3 Lives (Hearts) -->
-        <div class="flex items-center space-x-1 bg-black/40 px-3 py-1 rounded-full border border-red-500/30">
+        <div class="flex items-center space-x-1.5 bg-black/40 px-3 py-1 rounded-full border border-red-500/30">
           <span class="text-xs text-stone-400 font-bold hidden sm:inline">CAN:</span>
           <span id="heartsDisplay" class="text-sm tracking-widest text-red-500">❤️❤️❤️</span>
         </div>
@@ -56,14 +56,14 @@
       </div>
     </div>
 
-    <!-- Canvas Frame (Widescreen 16:9 Aspect) -->
+    <!-- Canvas Frame (Widescreen) -->
     <div class="relative w-full aspect-video max-h-[540px] bg-slate-950">
       <canvas id="gameCanvas" class="w-full h-full block cursor-pointer"></canvas>
 
       <!-- Combo & Message Floating Banner -->
       <div id="comboBanner" class="absolute top-4 left-1/2 -translate-x-1/2 pointer-events-none opacity-0 transition-all duration-300 scale-90 z-20 text-center">
-        <span id="comboText" class="px-5 py-2 rounded-full bg-amber-500/90 text-slate-950 font-black text-xs sm:text-sm tracking-wider shadow-lg border border-white/50 backdrop-blur-sm">
-          ÇAY & SİMİT KOMBOSU! +50
+        <span id="comboText" class="px-5 py-2 rounded-full bg-amber-500/95 text-slate-950 font-black text-xs sm:text-sm tracking-wider shadow-lg border border-white/50 backdrop-blur-sm">
+          ÇITIR SİMİT! +15 🥯
         </span>
       </div>
 
@@ -81,17 +81,17 @@
         </div>
         <h2 class="title-font text-2xl sm:text-3xl font-black text-amber-300 mb-1 drop-shadow-md">BAYRAK RÜZGARI</h2>
         <p class="text-xs sm:text-sm text-amber-100/90 max-w-sm mb-4 font-medium leading-relaxed">
-          İstanbul semalarında şanlı bayrağımızı dalgalandır! Genişletilmiş gökyüzü, 3 can hakkı ve ipeksi süzülüş fiziği ile rahat ve keyifli uçuşun tadını çıkar.
+          İstanbul semalarında gökyüzünü süsleyen çıtır simitleri ve çayları topla! Nadir çıkan <strong>Doğan Güneş</strong> ile canını yenile.
         </p>
 
         <div class="bg-white/5 border border-white/10 rounded-xl px-5 py-3 mb-5 max-w-sm text-xs text-slate-300 space-y-1.5">
           <p class="flex items-center justify-center gap-2"><span>👆 <strong>Tıkla / Dokun</strong> veya <strong>Boşluk (Space)</strong></span></p>
-          <p class="text-red-400 font-bold">❤️ 3 Can Hakkı • 🛡️ Hilal ile Kalkan Koruması</p>
-          <p class="text-amber-300/80 font-medium">☕ Çay (+10) • 🥯 Simit (+15) • ⭐ Ay-Yıldız (+30)</p>
+          <p class="text-amber-300 font-bold">🥯 Bol Çıtır Simit (+15) • ☕ Çay (+10)</p>
+          <p class="text-orange-400 font-bold">☀️ Doğan Güneş (10 itemde 1): ❤️ +1 Can Yeniler!</p>
         </div>
 
         <button id="startBtn" class="px-8 py-3 bg-gradient-to-r from-red-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-extrabold rounded-xl shadow-xl shadow-red-700/40 border border-amber-400/40 transform active:scale-95 transition tracking-wider uppercase text-sm">
-          Hemen Uçuşa Başla
+          Uçuşa Başla
         </button>
       </div>
 
@@ -124,10 +124,11 @@
     <!-- Footer Controls Tip -->
     <div class="w-full bg-slate-950/80 px-4 py-2 border-t border-slate-800 text-[11px] text-slate-400 flex flex-wrap justify-between items-center gap-2">
       <div class="flex items-center gap-3">
-        <span>🕹️ Boşluk / Tıklama ile İpeksi Zıpla</span>
-        <span>🌊 Denize Düşünce Yukarı Sıçrar</span>
+        <span>🥯 <strong>Bol Simit Modu</strong></span>
+        <span>☀️ <strong>Güneş:</strong> Can Doldurur</span>
+        <span>🌊 <strong>Deniz:</strong> Sıçratarak Korur</span>
       </div>
-      <span class="text-amber-400/80 font-medium">3 Canlı & Geniş Aralıklı Rahat Sürüm</span>
+      <span class="text-amber-400/80 font-medium">Şafak Vakti Genişletilmiş Sürüm</span>
     </div>
 
   </div>
@@ -211,6 +212,31 @@
         } catch(e) {}
       }
 
+      // Uplifting Sun Melody
+      playSunHeal() {
+        if (!this.enabled) return;
+        this.init();
+        try {
+          const now = this.ctx.currentTime;
+          const notes = [329.63, 392.00, 493.88, 587.33, 659.25]; // E, G, B, D, E (Işık/Şifa)
+          notes.forEach((freq, idx) => {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, now + idx * 0.06);
+
+            gain.gain.setValueAtTime(0.16, now + idx * 0.06);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.35);
+
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+
+            osc.start(now + idx * 0.06);
+            osc.stop(now + idx * 0.06 + 0.38);
+          });
+        } catch(e) {}
+      }
+
       playMehterChord() {
         if (!this.enabled) return;
         this.init();
@@ -228,7 +254,7 @@
             filter.frequency.setValueAtTime(1200, now);
 
             gain.gain.setValueAtTime(0.09, now + idx * 0.03);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.03 + 0.45);
 
             osc.connect(filter);
             filter.connect(gain);
@@ -335,19 +361,21 @@
     let score = 0;
     let frame = 0;
 
-    // 3 LIVES & SHIELD SYSTEM
     let lives = 3;
-    let invulnerableTimer = 0; // Frames of invulnerability after taking a hit
+    let invulnerableTimer = 0;
     let hasShield = false;
 
-    // SOFT SILK GLIDING PHYSICS (Çok daha yumuşak ve akıcı)
+    // ITEM COUNTER TO GUARANTEE 1 IN 10 IS A SUN (☀️)
+    let totalItemsSpawned = 0;
+
+    // GENTLE SILK FLUTTER PHYSICS
     const player = {
       x: 120,
       y: 200,
       radius: 18,
       vy: 0,
-      gravity: 0.24,     // Was 0.38 (Now floats gently like silk!)
-      jumpForce: -5.6,   // Was -7.2 (Gentle floating jump)
+      gravity: 0.24,
+      jumpForce: -5.6,
       rotation: 0,
       flagWaveTime: 0,
       trail: []
@@ -355,7 +383,10 @@
 
     let obstacles = [];
     let obstacleTimer = 0;
-    const OBSTACLE_INTERVAL = 170; // Was 115 (Now plenty of breathing room!)
+    const OBSTACLE_INTERVAL = 170;
+
+    // Open sky item spawner timer
+    let skyItemTimer = 0;
 
     let collectibles = [];
     let sparkles = [];
@@ -384,6 +415,8 @@
       collectibles = [];
       sparkles = [];
       obstacleTimer = 0;
+      skyItemTimer = 0;
+      totalItemsSpawned = 0;
       score = 0;
       lives = 3;
       invulnerableTimer = 0;
@@ -427,14 +460,28 @@
       setTimeout(() => {
         comboBanner.style.opacity = '0';
         comboBanner.style.transform = 'translate(-50%, -10px) scale(0.9)';
-      }, 1400);
+      }, 1500);
     }
 
-    // SPAWN OBSTACLES WITH MUCH WIDER, GENEROUS GAP (%50 Daha Geniş Aralık)
+    // ITEM GENERATOR: LOTS OF SIMIT + 1 IN 10 SUNS (GÜNEŞ)
+    function pickNextItemType() {
+      totalItemsSpawned++;
+
+      // Exactly 1 in 10 is the Life-Giving Sun (☀️)
+      if (totalItemsSpawned % 10 === 0) {
+        return 'SUN';
+      }
+
+      // Lots of Simits! (55% Simit, 30% Çay, 15% Hilal)
+      const r = Math.random();
+      if (r < 0.55) return 'SIMIT';
+      else if (r < 0.85) return 'TEA';
+      else return 'STAR';
+    }
+
     function spawnObstaclePair() {
       const w = canvas.width;
       const h = canvas.height;
-      // Gap increased from h * 0.32 to h * 0.46 (Huge, comfortable passage!)
       const gap = Math.max(190, h * 0.46);
       const minTop = 50;
       const maxTop = h - gap - 70;
@@ -448,32 +495,44 @@
         passed: false
       });
 
-      // Spawn item in the generous gap
+      // Item in cloud gap
       const itemY = topHeight + gap / 2;
-      const r = Math.random();
-      let type = 'TEA';
-      if (r < 0.35) type = 'TEA';
-      else if (r < 0.7) type = 'SIMIT';
-      else type = 'STAR';
+      const itemType = pickNextItemType();
 
       collectibles.push({
         x: w + 40 + 29,
         y: itemY,
-        type: type,
-        radius: 18,
+        type: itemType,
+        radius: itemType === 'SUN' ? 22 : 18,
         floatOffset: Math.random() * Math.PI * 2,
         collected: false
       });
     }
 
-    // HIT DAMAGE WITH 3 LIVES SYSTEM & INVULNERABILITY
+    // EXTRA OPEN-SKY SIMIT / ITEM SPAWNER (Gökyüzünde Süzülen Simitler)
+    function spawnSkyItem() {
+      const w = canvas.width;
+      const h = canvas.height;
+      const itemY = h * 0.25 + Math.random() * (h * 0.45);
+      const itemType = pickNextItemType();
+
+      collectibles.push({
+        x: w + 30,
+        y: itemY,
+        type: itemType,
+        radius: itemType === 'SUN' ? 22 : 18,
+        floatOffset: Math.random() * Math.PI * 2,
+        collected: false
+      });
+    }
+
     function takeDamage() {
-      if (invulnerableTimer > 0) return; // Shielded by hit window
+      if (invulnerableTimer > 0) return;
 
       if (hasShield) {
         hasShield = false;
         shieldIndicator.style.opacity = '0';
-        invulnerableTimer = 60; // 1 sec immunity
+        invulnerableTimer = 60;
         sound.playBounce();
         showCombo('🛡️ HİLAL KALKANI DARBEYİ SOĞURDU!');
         return;
@@ -485,8 +544,8 @@
       if (lives <= 0) {
         triggerGameOver();
       } else {
-        invulnerableTimer = 90; // 1.5 seconds invulnerability!
-        player.vy = -3.8; // Gentle bounce back
+        invulnerableTimer = 90;
+        player.vy = -3.8;
         sound.playHurt();
         showCombo(`⚠️ DİKKAT! KALAN CAN: ${lives}`);
       }
@@ -512,7 +571,6 @@
       ctx.fillStyle = sunGrad;
       ctx.fillRect(0, 0, w, h);
 
-      // Distant Hills
       ctx.fillStyle = 'rgba(60, 20, 45, 0.45)';
       ctx.beginPath();
       ctx.moveTo(0, h * 0.78);
@@ -524,7 +582,6 @@
       ctx.lineTo(0, h);
       ctx.fill();
 
-      // Middle Silhouette: Historic Istanbul Peninsula
       ctx.fillStyle = 'rgba(24, 10, 30, 0.9)';
       const skylinePatternWidth = 480;
       const startX = -(bgOffsetMid % skylinePatternWidth);
@@ -533,7 +590,6 @@
         drawIstanbulSegment(offset, h * 0.82);
       }
 
-      // Sea Line
       const seaGrad = ctx.createLinearGradient(0, h * 0.82, 0, h);
       seaGrad.addColorStop(0, 'rgba(15, 23, 42, 0.95)');
       seaGrad.addColorStop(0.2, 'rgba(180, 83, 9, 0.3)');
@@ -541,7 +597,6 @@
       ctx.fillStyle = seaGrad;
       ctx.fillRect(0, h * 0.82, w, h * 0.18);
 
-      // Water Ripples
       ctx.strokeStyle = 'rgba(253, 224, 71, 0.25)';
       ctx.lineWidth = 1.5;
       for (let i = 0; i < 6; i++) {
@@ -592,12 +647,10 @@
       ctx.save();
       ctx.translate(x, y);
 
-      // Flashing opacity during invulnerability
       if (invulnerableTimer > 0 && Math.floor(frame / 6) % 2 === 0) {
         ctx.globalAlpha = 0.45;
       }
 
-      // Golden Shield Aura if active
       if (hasShield) {
         const aura = ctx.createRadialGradient(8, 0, 10, 8, 0, 38);
         aura.addColorStop(0, 'rgba(56, 189, 248, 0.5)');
@@ -746,15 +799,48 @@
         ctx.save();
         ctx.translate(item.x, fy);
 
-        const glow = ctx.createRadialGradient(0, 0, 4, 0, 0, item.radius + 8);
-        glow.addColorStop(0, 'rgba(251, 191, 36, 0.5)');
-        glow.addColorStop(1, 'rgba(251, 191, 36, 0)');
-        ctx.fillStyle = glow;
-        ctx.beginPath();
-        ctx.arc(0, 0, item.radius + 8, 0, Math.PI * 2);
-        ctx.fill();
+        // 1. SIMIT (ÇITIR SUSAMLI SİMİT - ARTTIRILMIŞ)
+        if (item.type === 'SIMIT') {
+          // Warm halo
+          const glow = ctx.createRadialGradient(0, 0, 4, 0, 0, item.radius + 8);
+          glow.addColorStop(0, 'rgba(251, 191, 36, 0.5)');
+          glow.addColorStop(1, 'rgba(251, 191, 36, 0)');
+          ctx.fillStyle = glow;
+          ctx.beginPath();
+          ctx.arc(0, 0, item.radius + 8, 0, Math.PI * 2);
+          ctx.fill();
 
-        if (item.type === 'TEA') {
+          // Baked crust
+          ctx.fillStyle = '#b45309';
+          ctx.beginPath();
+          ctx.arc(0, 0, 14, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Hole
+          ctx.fillStyle = '#1e1b4b';
+          ctx.beginPath();
+          ctx.arc(0, 0, 6.5, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Sesame seeds
+          ctx.fillStyle = '#fef08a';
+          for (let s = 0; s < 10; s++) {
+            const ang = (s / 10) * Math.PI * 2 + (frame * 0.02);
+            const sx = Math.cos(ang) * 10;
+            const sy = Math.sin(ang) * 10;
+            ctx.fillRect(sx, sy, 2.2, 2.2);
+          }
+
+        // 2. TEA (İNCE BELLİ ÇAY)
+        } else if (item.type === 'TEA') {
+          const glow = ctx.createRadialGradient(0, 0, 4, 0, 0, item.radius + 8);
+          glow.addColorStop(0, 'rgba(239, 68, 68, 0.45)');
+          glow.addColorStop(1, 'rgba(239, 68, 68, 0)');
+          ctx.fillStyle = glow;
+          ctx.beginPath();
+          ctx.arc(0, 0, item.radius + 8, 0, Math.PI * 2);
+          ctx.fill();
+
           ctx.fillStyle = 'rgba(185, 28, 28, 0.85)';
           ctx.beginPath();
           ctx.ellipse(0, 4, 9, 12, 0, 0, Math.PI * 2);
@@ -775,6 +861,7 @@
           ctx.fillStyle = '#dc2626';
           ctx.fillRect(-8, 14, 16, 1.5);
 
+          // Steam
           ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
           ctx.lineWidth = 1.2;
           ctx.beginPath();
@@ -784,26 +871,59 @@
           ctx.quadraticCurveTo(6, -18, 3, -23);
           ctx.stroke();
 
-        } else if (item.type === 'SIMIT') {
-          ctx.fillStyle = '#b45309';
+        // 3. SUN (DOĞAN GÜNEŞ - CAN YENİLER! ❤️)
+        } else if (item.type === 'SUN') {
+          const sunPulse = 1.0 + Math.sin(frame * 0.1) * 0.12;
+
+          // Outer radiant solar flare glow
+          const sunGlow = ctx.createRadialGradient(0, 0, 5, 0, 0, item.radius + 14);
+          sunGlow.addColorStop(0, 'rgba(254, 240, 138, 0.95)');
+          sunGlow.addColorStop(0.4, 'rgba(249, 115, 22, 0.5)');
+          sunGlow.addColorStop(1, 'rgba(249, 115, 22, 0)');
+          ctx.fillStyle = sunGlow;
           ctx.beginPath();
-          ctx.arc(0, 0, 13, 0, Math.PI * 2);
+          ctx.arc(0, 0, item.radius + 14, 0, Math.PI * 2);
           ctx.fill();
 
-          ctx.fillStyle = '#1e1b4b';
-          ctx.beginPath();
-          ctx.arc(0, 0, 6, 0, Math.PI * 2);
-          ctx.fill();
-
-          ctx.fillStyle = '#fef08a';
-          for (let s = 0; s < 8; s++) {
-            const ang = (s / 8) * Math.PI * 2;
-            const sx = Math.cos(ang) * 9.5;
-            const sy = Math.sin(ang) * 9.5;
-            ctx.fillRect(sx, sy, 2, 2);
+          // Rotating Solar Rays
+          ctx.strokeStyle = '#fde047';
+          ctx.lineWidth = 2.2;
+          for (let r = 0; r < 8; r++) {
+            const rayAngle = (r / 8) * Math.PI * 2 + (frame * 0.035);
+            const innerDist = item.radius * 0.85;
+            const outerDist = (item.radius + 8) * sunPulse;
+            ctx.beginPath();
+            ctx.moveTo(Math.cos(rayAngle) * innerDist, Math.sin(rayAngle) * innerDist);
+            ctx.lineTo(Math.cos(rayAngle) * outerDist, Math.sin(rayAngle) * outerDist);
+            ctx.stroke();
           }
 
+          // Golden Sun Core
+          const coreGrad = ctx.createRadialGradient(-3, -3, 2, 0, 0, item.radius * 0.82);
+          coreGrad.addColorStop(0, '#ffffff');
+          coreGrad.addColorStop(0.3, '#fef08a');
+          coreGrad.addColorStop(0.8, '#f59e0b');
+          coreGrad.addColorStop(1, '#ea580c');
+          ctx.fillStyle = coreGrad;
+          ctx.beginPath();
+          ctx.arc(0, 0, item.radius * 0.82, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Heart symbol in center (Showing it heals! ❤️)
+          ctx.fillStyle = '#dc2626';
+          ctx.font = 'bold 11px sans-serif';
+          ctx.fillText('❤️', -6, 4);
+
+        // 4. STAR (ŞANLI HİLAL & KALKAN)
         } else if (item.type === 'STAR') {
+          const glow = ctx.createRadialGradient(0, 0, 4, 0, 0, item.radius + 8);
+          glow.addColorStop(0, 'rgba(56, 189, 248, 0.6)');
+          glow.addColorStop(1, 'rgba(56, 189, 248, 0)');
+          ctx.fillStyle = glow;
+          ctx.beginPath();
+          ctx.arc(0, 0, item.radius + 8, 0, Math.PI * 2);
+          ctx.fill();
+
           ctx.fillStyle = '#fde047';
           ctx.beginPath();
           ctx.arc(-2, 0, 11, 0, Math.PI * 2);
@@ -849,23 +969,20 @@
       if (state === 'PLAYING') {
         if (invulnerableTimer > 0) invulnerableTimer--;
 
-        // Gentle floating physics
         player.vy += player.gravity;
         player.y += player.vy;
 
-        // Ceiling boundary
         if (player.y - player.radius < 0) {
           player.y = player.radius;
           player.vy = 0;
         }
 
-        // WATER BOUNCE MECHANIC: Denize düşünce batıp ölmek yerine yukarı sıçrar!
+        // WATER BOUNCE
         if (player.y + player.radius > canvas.height * 0.82) {
           player.y = canvas.height * 0.82 - player.radius;
-          player.vy = -5.4; // Soft sea bounce!
+          player.vy = -5.4;
           sound.playBounce();
 
-          // Water splash sparkles
           for (let s = 0; s < 8; s++) {
             sparkles.push({
               x: player.x + (Math.random() * 30 - 15),
@@ -883,16 +1000,24 @@
         bgOffsetMid += 1.1;
         bgOffsetSea += 1.6;
 
+        // Obstacles
         obstacleTimer++;
         if (obstacleTimer >= OBSTACLE_INTERVAL) {
           obstacleTimer = 0;
           spawnObstaclePair();
         }
 
+        // Extra Sky Simit Spawner (Every 95 frames)
+        skyItemTimer++;
+        if (skyItemTimer >= 95) {
+          skyItemTimer = 0;
+          spawnSkyItem();
+        }
+
         // Update Obstacles
         for (let i = obstacles.length - 1; i >= 0; i--) {
           const obs = obstacles[i];
-          obs.x -= 2.2; // Slower, comfortable flight speed
+          obs.x -= 2.2;
 
           if (!obs.passed && obs.x + obs.width < player.x) {
             obs.passed = true;
@@ -901,14 +1026,13 @@
             sound.playNeyCollect(523.25);
           }
 
-          // Forgiving Fair Hitbox (Only center triggers damage)
           const px = player.x;
           const py = player.y;
-          const r = 10; // Tight, fair inner hitbox
+          const r = 10;
 
           if (px + r > obs.x && px - r < obs.x + obs.width) {
             if (py - r < obs.topHeight || py + r > obs.bottomY) {
-              takeDamage(); // 3 lives system!
+              takeDamage();
             }
           }
 
@@ -930,20 +1054,53 @@
             item.collected = true;
 
             let pts = 10;
-            if (item.type === 'TEA') {
-              pts = 10;
-              sound.playNeyCollect(587.33);
-              showCombo('TAVŞANKANI ÇAY! +10');
-            } else if (item.type === 'SIMIT') {
+
+            // SIMIT
+            if (item.type === 'SIMIT') {
               pts = 15;
               sound.playNeyCollect(659.25);
-              showCombo('ÇITIR SİMİT! +15');
+              showCombo('ÇITIR SİMİT! +15 🥯');
+
+            // TEA
+            } else if (item.type === 'TEA') {
+              pts = 10;
+              sound.playNeyCollect(587.33);
+              showCombo('TAVŞANKANI ÇAY! +10 ☕');
+
+            // SUN (CAN VERİR ❤️ - 10 İTEMDE 1)
+            } else if (item.type === 'SUN') {
+              pts = 25;
+              sound.playSunHeal();
+
+              if (lives < 3) {
+                lives++;
+                updateHeartsUI();
+                showCombo('☀️ DOĞAN GÜNEŞ! +1 CAN KAZANDIN ❤️');
+              } else {
+                showCombo('☀️ DOĞAN GÜNEŞ! CAN DOLU +50 PUAN ⭐');
+                pts = 50;
+              }
+
+              // Solar golden burst sparkles
+              for (let s = 0; s < 18; s++) {
+                sparkles.push({
+                  x: item.x,
+                  y: item.y,
+                  vx: (Math.random() - 0.5) * 8,
+                  vy: (Math.random() - 0.5) * 8,
+                  size: 4 + Math.random() * 4,
+                  color: '#fde047',
+                  life: 1.2
+                });
+              }
+
+            // STAR
             } else if (item.type === 'STAR') {
               pts = 30;
-              hasShield = true; // Shield Power-up!
+              hasShield = true;
               shieldIndicator.style.opacity = '1';
               sound.playMehterChord();
-              showCombo('ŞANLI HİLAL & KALKAN! +30');
+              showCombo('ŞANLI HİLAL & KALKAN! +30 🛡️');
             }
 
             score += pts;
@@ -956,7 +1113,7 @@
                 vx: (Math.random() - 0.5) * 5,
                 vy: (Math.random() - 0.5) * 5,
                 size: 3 + Math.random() * 3,
-                color: item.type === 'TEA' ? '#ef4444' : '#fbbf24',
+                color: item.type === 'SUN' ? '#fde047' : (item.type === 'TEA' ? '#ef4444' : '#fbbf24'),
                 life: 1.0
               });
             }
